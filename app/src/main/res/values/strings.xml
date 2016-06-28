@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Simple Tweets</string>
+    <string name="login_label">Log in</string>
+    <string name="title_activity_timeline">Home Timeline</string>
+    <string name="login_welcome">Welcome to Twitter.</string>
+    <string name="login_description">Get real-time updates about what matters to you.</string>
+
+</resources>
