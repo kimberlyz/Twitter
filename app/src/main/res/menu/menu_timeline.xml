@@ -4,9 +4,19 @@
 
     <item
         android:id="@+id/miProfile"
+        android:orderInCategory="1"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_profile"
         android:title="Profile"
         android:onClick="onProfileView" />
+
+    <item
+        android:id="@+id/post"
+        android:orderInCategory="2"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/post"
+        android:title="Post"
+        android:onClick="onPostTweet" />
+
 
 </menu>

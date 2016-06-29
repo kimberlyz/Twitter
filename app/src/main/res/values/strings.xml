@@ -6,5 +6,7 @@
     <string name="title_activity_timeline">Home Timeline</string>
     <string name="login_welcome">Welcome to Twitter.</string>
     <string name="login_description">Get real-time updates about what matters to you.</string>
+    <string name="post_hint">What\'s happening?</string>
+    <string name="tweet">Tweet</string>
 
 </resources>

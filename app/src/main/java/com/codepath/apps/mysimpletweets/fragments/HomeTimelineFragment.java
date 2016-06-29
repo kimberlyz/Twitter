@@ -47,6 +47,11 @@ public class HomeTimelineFragment extends TweetsListFragment {
                 Log.d("DEBUG", errorResponse.toString());
             }
         });
+    }
 
+    public void appendTweet(Tweet tweet) {
+        tweets.add(0, tweet);
+        aTweets.notifyDataSetChanged();
+        lvTweets.setSelection(0);
     }
 }

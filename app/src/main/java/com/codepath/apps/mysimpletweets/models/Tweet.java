@@ -3,18 +3,20 @@ package com.codepath.apps.mysimpletweets.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
 /**
  * Created by kzai on 6/27/16.
  */
+@Parcel
 public class Tweet {
     // List out the attributes
-    private String body;
-    private long uid; // unique id for tweet
-    private User user;
-    private String createdAt;
+    String body;
+    long uid; // unique id for tweet
+    User user;
+    String createdAt;
 
     public String getBody() {
         return body;
@@ -30,6 +32,9 @@ public class Tweet {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+    public Tweet() {
     }
 
     // Deserialize the json

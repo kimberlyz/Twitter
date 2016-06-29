@@ -20,9 +20,9 @@ import java.util.List;
  */
 public class TweetsListFragment extends Fragment {
 
-    private ListView lvTweets;
-    private ArrayList<Tweet> tweets;
-    private TweetsArrayAdapter aTweets;
+    ListView lvTweets;
+    ArrayList<Tweet> tweets;
+    TweetsArrayAdapter aTweets;
 
     // inflation logic
     @Nullable
