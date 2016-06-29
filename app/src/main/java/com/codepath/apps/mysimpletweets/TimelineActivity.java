@@ -15,10 +15,12 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
+import com.roughike.bottombar.BottomBar;
 
 public class TimelineActivity extends AppCompatActivity {
 
     private TweetsListFragment fragmentTweetsList;
+    private BottomBar bottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class TimelineActivity extends AppCompatActivity {
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         // Attach the pager tabs to the viewpager
         tabStrip.setViewPager(vpPager);
+
     }
 
     @Override

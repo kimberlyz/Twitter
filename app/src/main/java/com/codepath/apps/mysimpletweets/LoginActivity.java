@@ -1,9 +1,12 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
@@ -14,6 +17,16 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		Typeface gotham_book = Typeface.createFromAsset(getAssets(), "fonts/GothamNarrow-Book.ttf");
+		Typeface gotham_bold = Typeface.createFromAsset(getAssets(), "fonts/GothamNarrow-Bold.ttf");
+
+		TextView tvWelcome = (TextView) findViewById(R.id.tvWelcome);
+		TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
+		Button btnLogin = (Button) findViewById(R.id.btnLogin);
+
+		tvWelcome.setTypeface(gotham_book);
+		tvDescription.setTypeface(gotham_book);
+		btnLogin.setTypeface(gotham_bold);
 	}
 
 

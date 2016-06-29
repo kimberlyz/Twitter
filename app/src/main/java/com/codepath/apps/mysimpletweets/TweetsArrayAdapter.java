@@ -1,6 +1,8 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,10 @@ import android.widget.TextView;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by kzai on 6/27/16.
@@ -20,31 +25,77 @@ import java.util.List;
 // Taking the Tweet objects and turning them into views
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
+    private Typeface gotham_book;
+    private Typeface gotham_bold;
+
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, android.R.layout.simple_list_item_1, tweets);
+
+        gotham_book = Typeface.createFromAsset(context.getAssets(), "fonts/GothamNarrow-Book.ttf");
+        gotham_bold = Typeface.createFromAsset(context.getAssets(), "fonts/GothamNarrow-Bold.ttf");
     }
 
     // Override and setup custom template
-
+    private static class Viewholder {
+        ImageView profileImage;
+        TextView username;
+        TextView screenName;
+        TextView body;
+        TextView timestamp;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // 1. Get the tweet
         Tweet tweet = getItem(position);
         // 2. Find or inflate the template
+        Viewholder viewholder;
         if (convertView == null) {
+            viewholder = new Viewholder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
+            viewholder.profileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
+            viewholder.username = (TextView) convertView.findViewById(R.id.tvUsername);
+            viewholder.screenName = (TextView) convertView.findViewById(R.id.tvScreenName);
+            viewholder.body = (TextView) convertView.findViewById(R.id.tvBody);
+            viewholder.timestamp = (TextView) convertView.findViewById(R.id.tvTimestamp);
+
+            viewholder.username.setTypeface(gotham_bold);
+            viewholder.screenName.setTypeface(gotham_book);
+            viewholder.body.setTypeface(gotham_book);
+            viewholder.timestamp.setTypeface(gotham_book);
+
+            convertView.setTag(viewholder);
+        } else {
+            viewholder = (Viewholder) convertView.getTag();
         }
         // 3. Find the subviews to fill with data in the template
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-        TextView tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
-        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+
         // 4. Populate data into the subviews
-        tvUsername.setText(tweet.getUser().getScreenName());
-        tvBody.setText(tweet.getBody());
-        ivProfileImage.setImageResource(android.R.color.transparent);
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImage()).into(ivProfileImage);
+        viewholder.username.setText(tweet.getUser().getName());
+        viewholder.screenName.setText(tweet.getUser().getScreenName());
+        viewholder.body.setText(tweet.getBody());
+        viewholder.profileImage.setImageResource(android.R.color.transparent);
+        viewholder.timestamp.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImage()).into(viewholder.profileImage);
         // 5. Return the view to be inserted in the list
         return convertView;
+    }
+
+    // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
+    public String getRelativeTimeAgo(String rawJsonDate) {
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(rawJsonDate).getTime();
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return relativeDate;
     }
 }
