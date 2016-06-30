@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // 1. Get the tweet
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
         // 2. Find or inflate the template
         Viewholder viewholder;
         if (convertView == null) {
@@ -77,6 +78,16 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewholder.profileImage.setImageResource(android.R.color.transparent);
         viewholder.timestamp.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
         Picasso.with(getContext()).load(tweet.getUser().getProfileImage()).into(viewholder.profileImage);
+
+        viewholder.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), ProfileActivity.class);
+                i.putExtra("screen_name", tweet.getUser().getScreenName());
+                getContext().startActivity(i);
+            }
+        });
+
         // 5. Return the view to be inserted in the list
         return convertView;
     }

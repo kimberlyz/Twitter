@@ -18,14 +18,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:id="@+id/rlUserHeader"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorWhite">
 
         <ImageView
             android:layout_width="75dp"
@@ -41,37 +42,50 @@
             android:layout_height="wrap_content"
             android:text="Name"
             android:id="@+id/tvName"
-            android:layout_alignParentTop="true"
+            android:textSize="16sp"
+            android:textColor="@color/colorBlack"
+            android:layout_alignTop="@+id/ivProfileImage"
             android:layout_toRightOf="@+id/ivProfileImage"
-            android:layout_toEndOf="@+id/ivProfileImage"
-            android:textSize="16sp"/>
+            android:layout_toEndOf="@+id/ivProfileImage" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\@ScreenName"
+            android:id="@+id/tvScreenName"
+            android:layout_below="@+id/tvName"
+            android:layout_alignLeft="@+id/tvName"
+            android:layout_alignStart="@+id/tvName" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tagline"
             android:id="@+id/tvTagline"
-            android:layout_below="@+id/tvName"
-            android:layout_toRightOf="@+id/ivProfileImage"
-            android:layout_toEndOf="@+id/ivProfileImage"
-            android:textSize="12sp"/>
+            android:textColor="@color/colorBlack"
+            android:layout_below="@+id/ivProfileImage"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/llCounts"
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_below="@+id/rlUserHeader"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:background="@color/colorWhite"
+        android:paddingBottom="15dp">
         
         <TextView
             android:id="@+id/tvFollowers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5 Followers"/>
+            android:text="5 Followers"
+            android:paddingLeft="10dp" />
 
         <TextView
             android:id="@+id/tvFollowing"
@@ -88,6 +102,8 @@
         android:layout_below="@+id/llCounts"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/flContainer"></FrameLayout>
+        android:id="@+id/flContainer"
+        android:background="@color/colorWhite"
+        android:layout_marginTop="3dp"></FrameLayout>
 
 </RelativeLayout>
