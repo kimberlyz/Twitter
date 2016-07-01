@@ -4,21 +4,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.mysimpletweets.activities.ComposeActivity;
 import com.codepath.apps.mysimpletweets.activities.ProfileActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by kzai on 6/27/16.
@@ -44,6 +52,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         TextView screenName;
         TextView body;
         TextView timestamp;
+        Button reply;
+        Button retweet;
     }
 
     @Override
@@ -51,7 +61,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         // 1. Get the tweet
         final Tweet tweet = getItem(position);
         // 2. Find or inflate the template
-        Viewholder viewholder;
+        final Viewholder viewholder;
         if (convertView == null) {
             viewholder = new Viewholder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
@@ -60,6 +70,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             viewholder.screenName = (TextView) convertView.findViewById(R.id.tvScreenName);
             viewholder.body = (TextView) convertView.findViewById(R.id.tvBody);
             viewholder.timestamp = (TextView) convertView.findViewById(R.id.tvTimestamp);
+            viewholder.reply = (Button) convertView.findViewById(R.id.btnReply);
+            viewholder.retweet = (Button) convertView.findViewById(R.id.btnRetweet);
 
             viewholder.username.setTypeface(gotham_bold);
             viewholder.screenName.setTypeface(gotham_book);
@@ -86,6 +98,35 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                 Intent i = new Intent(getContext(), ProfileActivity.class);
                 i.putExtra("screen_name", tweet.getUser().getScreenName());
                 getContext().startActivity(i);
+            }
+        });
+
+        viewholder.reply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), ComposeActivity.class);
+                i.putExtra("screen_name", tweet.getUser().getScreenName());
+                getContext().startActivity(i);
+            }
+        });
+
+        viewholder.retweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TwitterClient client = TwitterApplication.getRestClient();
+                client.retweet(tweet.getUid(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        viewholder.retweet.setBackgroundResource(R.drawable.retweet_active);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.d("DEBUG", errorResponse.toString());
+                    }
+                });
+
+
             }
         });
 

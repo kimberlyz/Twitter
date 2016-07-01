@@ -58,6 +58,12 @@ public class ComposeActivity extends AppCompatActivity {
         etStatus.addTextChangedListener(textEditorWatcher);
 
         client = TwitterApplication.getRestClient(); // singleton client
+
+        String screenName = getIntent().getStringExtra("screen_name");
+        if (screenName != null && !screenName.isEmpty()) {
+            etStatus.setText(screenName + " ");
+            etStatus.setSelection(etStatus.getText().length());
+        }
     }
 
     @Override
