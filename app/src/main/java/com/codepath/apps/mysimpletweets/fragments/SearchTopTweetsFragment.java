@@ -20,13 +20,22 @@ import cz.msebera.android.httpclient.Header;
  */
 public class SearchTopTweetsFragment extends TweetsListFragment {
     private TwitterClient client;
+    private String query;
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String q) {
+        query = q;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         client = TwitterApplication.getRestClient(); // singleton client
-        populateTimeline();
+        populateTimeline(query);
     }
 
     public static SearchTopTweetsFragment newFragment(String query) {
@@ -39,15 +48,18 @@ public class SearchTopTweetsFragment extends TweetsListFragment {
 
     // Send an API request to get the timeline json
     // Fill the list view by creating the Tweet objects from the json
-    public void populateTimeline() {
-        String query = getArguments().getString("query");
+    public void populateTimeline(String q) {
+        query = q;
+        //String query = getArguments().getString("query");
         client.searchTweets(query, "popular", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 JSONArray statuses = null;
                 try {
+                    aTweets.clear();
                     statuses = response.getJSONArray("statuses");
                     addAll(Tweet.fromJSONArray(statuses));
+                    lvTweets.setSelectionAfterHeaderView();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

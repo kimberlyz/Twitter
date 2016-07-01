@@ -43,8 +43,11 @@ public class SearchActivity extends AppCompatActivity {
         // Attach the pager tabs to the viewpager
         tabStrip.setViewPager(vpPager);
 
-        searchTweetsFragment = SearchTweetsFragment.newFragment(getIntent().getStringExtra("query"));
-        searchTopTweetsFragment = SearchTopTweetsFragment.newFragment(getIntent().getStringExtra("query"));
+        searchTweetsFragment = new SearchTweetsFragment();
+        searchTopTweetsFragment = new SearchTopTweetsFragment();
+
+        searchTweetsFragment.setQuery(getIntent().getStringExtra("query"));
+        searchTopTweetsFragment.setQuery(getIntent().getStringExtra("query"));
     }
 
     @Override
@@ -64,9 +67,10 @@ public class SearchActivity extends AppCompatActivity {
                 // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
                 // see https://code.google.com/p/android/issues/detail?id=24599
                 searchView.clearFocus();
-                Intent i = new Intent(SearchActivity.this, SearchActivity.class);
-                i.putExtra("query", query);
-                startActivity(i);
+
+                // TODO: Fix it so only populates when necessary (when user clicks on each fragment)
+                searchTweetsFragment.populateTimeline(query);
+                searchTopTweetsFragment.populateTimeline(query);
                 return true;
             }
 
@@ -108,9 +112,9 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return searchTweetsFragment;
-            } else if (position == 1) {
                 return searchTopTweetsFragment;
+            } else if (position == 1) {
+                return searchTweetsFragment;
             } else {
                 return null;
             }

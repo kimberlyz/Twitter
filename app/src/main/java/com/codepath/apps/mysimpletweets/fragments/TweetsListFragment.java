@@ -18,6 +18,7 @@ import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -87,6 +88,10 @@ public class TweetsListFragment extends Fragment {
             populateHomeTimeline();
         } else if (this.getClass().equals(MentionsTimelineFragment.class)) {
             populateMentionsTimeline();
+        } else if (this.getClass().equals(SearchTweetsFragment.class)){
+            populateSearchTweetsTimeline(((SearchTweetsFragment) this).getQuery());
+        } else if (this.getClass().equals(SearchTopTweetsFragment.class)) {
+            populateSearchTopTweetsTimeline(((SearchTopTweetsFragment) this).getQuery());
         } else {
             Log.d("DEBUG", "This isn't working");
         }
@@ -124,6 +129,50 @@ public class TweetsListFragment extends Fragment {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
                 swipeContainer.setRefreshing(false);
+            }
+        });
+    }
+
+    private void populateSearchTweetsTimeline(String query) {
+        client.searchTweets(query, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                JSONArray statuses = null;
+                try {
+                    aTweets.clear();
+                    statuses = response.getJSONArray("statuses");
+                    addAll(Tweet.fromJSONArray(statuses));
+                    swipeContainer.setRefreshing(false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
+    }
+
+    private void populateSearchTopTweetsTimeline(String query) {
+        client.searchTweets(query, "popular", new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                JSONArray statuses = null;
+                try {
+                    aTweets.clear();
+                    statuses = response.getJSONArray("statuses");
+                    addAll(Tweet.fromJSONArray(statuses));
+                    swipeContainer.setRefreshing(false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
             }
         });
     }
