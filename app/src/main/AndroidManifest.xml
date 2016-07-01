@@ -49,7 +49,7 @@
         </activity>
         <activity android:name=".activities.TimelineActivity" />
         <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".activities.ComposeActivity" android:windowSoftInputMode="stateVisible" />
+        <activity android:name=".activities.ComposeActivity" android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".activities.SearchActivity"></activity>
     </application>
 

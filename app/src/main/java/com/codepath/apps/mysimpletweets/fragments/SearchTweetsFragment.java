@@ -60,7 +60,7 @@ public class SearchTweetsFragment extends TweetsListFragment {
                     aTweets.clear();
                     statuses = response.getJSONArray("statuses");
                     addAll(Tweet.fromJSONArray(statuses));
-                    lvTweets.setSelectionAfterHeaderView();
+                    lvTweets.setSelection(0);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

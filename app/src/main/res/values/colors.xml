@@ -12,4 +12,5 @@
     <color name="colorVeryLightGrey">#e1e8ed</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorAction">#AAB8C2</color>
+    <color name="colorRed">#e53935</color>
 </resources>
