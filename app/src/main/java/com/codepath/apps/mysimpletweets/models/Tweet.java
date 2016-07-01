@@ -17,6 +17,7 @@ public class Tweet {
     long uid; // unique id for tweet
     User user;
     String createdAt;
+    long retweetUid;
 
     public String getBody() {
         return body;
@@ -34,6 +35,15 @@ public class Tweet {
         return createdAt;
     }
 
+    public void setRetweetUid(long id) {
+        retweetUid = id;
+    }
+
+    public long getRetweetUid() {
+        return retweetUid;
+    }
+
+
     public Tweet() {
     }
 
@@ -47,6 +57,7 @@ public class Tweet {
             tweet.uid = jsonObject.getLong("id");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+            tweet.retweetUid = -1;
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -20,6 +20,7 @@ import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -116,19 +117,43 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             @Override
             public void onClick(View v) {
                 TwitterClient client = TwitterApplication.getRestClient();
-                long id = tweet.getUid();
-                client.retweet(tweet.getUid(), new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        Toast.makeText(getContext(), "Ugh", Toast.LENGTH_SHORT).show();
-                        viewholder.retweet.setBackgroundResource(R.drawable.retweet_active);
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        Log.d("DEBUG", errorResponse.toString());
-                    }
-                });
+                if (tweet.getRetweetUid() == -1) {
+                    client.retweet(tweet.getUid(), new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            Toast.makeText(getContext(), "Ugh", Toast.LENGTH_SHORT).show();
+                            try {
+                                tweet.setRetweetUid(response.getLong("id"));
+                                viewholder.retweet.setBackgroundResource(R.drawable.retweet_active);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.d("DEBUG", errorResponse.toString());
+                        }
+                    });
+                } else {
+                    client.unretweet(tweet.getRetweetUid(), new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            Toast.makeText(getContext(), "UnTweeted", Toast.LENGTH_SHORT).show();
+                            tweet.setRetweetUid(-1);
+                            viewholder.retweet.setBackgroundResource(R.drawable.retweet);
+                            super.onSuccess(statusCode, headers, response);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.d("DEBUG", errorResponse.toString());
+                        }
+                    });
+                }
+
+
 
 
             }
