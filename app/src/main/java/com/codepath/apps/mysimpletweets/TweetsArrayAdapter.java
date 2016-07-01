@@ -39,9 +39,12 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
     private Typeface gotham_book;
     private Typeface gotham_bold;
+    TwitterClient client;
 
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, android.R.layout.simple_list_item_1, tweets);
+
+        client = TwitterApplication.getRestClient();
 
         gotham_book = Typeface.createFromAsset(context.getAssets(), "fonts/GothamNarrow-Book.ttf");
         gotham_bold = Typeface.createFromAsset(context.getAssets(), "fonts/GothamNarrow-Bold.ttf");
@@ -56,6 +59,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         TextView timestamp;
         Button reply;
         Button retweet;
+        Button heart;
     }
 
     @Override
@@ -71,9 +75,11 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             viewholder.username = (TextView) convertView.findViewById(R.id.tvUsername);
             viewholder.screenName = (TextView) convertView.findViewById(R.id.tvScreenName);
             viewholder.body = (TextView) convertView.findViewById(R.id.tvBody);
+
             viewholder.timestamp = (TextView) convertView.findViewById(R.id.tvTimestamp);
             viewholder.reply = (Button) convertView.findViewById(R.id.btnReply);
             viewholder.retweet = (Button) convertView.findViewById(R.id.btnRetweet);
+            viewholder.heart = (Button) convertView.findViewById(R.id.btnHeart);
 
             viewholder.username.setTypeface(gotham_bold);
             viewholder.screenName.setTypeface(gotham_book);
@@ -94,6 +100,18 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewholder.timestamp.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
 
         Picasso.with(getContext()).load(tweet.getUser().getProfileImage()).into(viewholder.profileImage);
+
+        if (!tweet.getRetweeted()) {
+            viewholder.retweet.setBackgroundResource(R.drawable.retweet);
+        } else {
+            viewholder.retweet.setBackgroundResource(R.drawable.retweet_active);
+        }
+
+        if (!tweet.getFavorited()) {
+            viewholder.heart.setBackgroundResource(R.drawable.heart);
+        } else {
+            viewholder.heart.setBackgroundResource(R.drawable.heart_active);
+        }
 
         viewholder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,14 +134,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewholder.retweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TwitterClient client = TwitterApplication.getRestClient();
-
-                if (tweet.getRetweetUid() == -1) {
+                if (!tweet.getRetweeted()) {
                     client.retweet(tweet.getUid(), new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             Toast.makeText(getContext(), "Ugh", Toast.LENGTH_SHORT).show();
                             try {
+                                tweet.setRetweeted(true);
                                 tweet.setRetweetUid(response.getLong("id"));
                                 viewholder.retweet.setBackgroundResource(R.drawable.retweet_active);
                             } catch (JSONException e) {
@@ -141,6 +158,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             Toast.makeText(getContext(), "UnTweeted", Toast.LENGTH_SHORT).show();
+                            tweet.setRetweeted(false);
                             tweet.setRetweetUid(-1);
                             viewholder.retweet.setBackgroundResource(R.drawable.retweet);
                             super.onSuccess(statusCode, headers, response);
@@ -152,9 +170,41 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                         }
                     });
                 }
+            }
+        });
 
+        viewholder.heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!tweet.getFavorited()) {
+                    client.favorite(tweet.getUid(), new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            Toast.makeText(getContext(), "Favorited", Toast.LENGTH_SHORT).show();
+                            tweet.setFavorited(true);
+                            viewholder.heart.setBackgroundResource(R.drawable.heart_active);
+                        }
 
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.d("DEBUG", errorResponse.toString());
+                        }
+                    });
+                } else {
+                    client.unfavorite(tweet.getUid(), new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            Toast.makeText(getContext(), "Unfavorited", Toast.LENGTH_SHORT).show();
+                            tweet.setFavorited(false);
+                            viewholder.heart.setBackgroundResource(R.drawable.heart);
+                        }
 
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.d("DEBUG", errorResponse.toString());
+                        }
+                    });
+                }
 
             }
         });

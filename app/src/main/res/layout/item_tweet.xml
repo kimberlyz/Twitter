@@ -56,21 +56,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivProfileImage"
-        android:weightSum="4"
         android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage">
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
 
         <Button
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:background="@drawable/reply"
-            android:id="@+id/btnReply"
-            android:onClick="onReplyTweet"/>
+            android:id="@+id/btnReply" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" >
+        </Space>
 
         <Button
             android:layout_width="27dp"
             android:layout_height="27dp"
             android:background="@drawable/retweet"
             android:id="@+id/btnRetweet" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" >
+        </Space>
+
+        <Button
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:background="@drawable/heart"
+            android:id="@+id/btnHeart" />
     </LinearLayout>
 </RelativeLayout>

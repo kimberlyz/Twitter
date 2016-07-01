@@ -19,6 +19,12 @@ public class Tweet {
     String createdAt;
     long retweetUid;
 
+    long favoriteCount;
+    boolean favorited;
+
+    long retweetCount;
+    boolean retweeted;
+
     public String getBody() {
         return body;
     }
@@ -43,6 +49,29 @@ public class Tweet {
         return retweetUid;
     }
 
+    public void setFavorited(boolean b) {
+        favorited = b;
+    }
+
+    public boolean getFavorited() {
+        return favorited;
+    }
+
+    public long getFavoriteCount() {
+        return favoriteCount;
+    }
+
+    public long getRetweetCount() {
+        return retweetCount;
+    }
+
+    public void setRetweeted(Boolean b) {
+        retweeted = b;
+    }
+
+    public boolean getRetweeted() {
+        return retweeted;
+    }
 
     public Tweet() {
     }
@@ -57,7 +86,14 @@ public class Tweet {
             tweet.uid = jsonObject.getLong("id");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+
+            //tweet.favoriteCount = jsonObject.getLong("favourites_count");
+            tweet.favorited = jsonObject.getBoolean("favorited");
+
             tweet.retweetUid = -1;
+
+            tweet.retweetCount = jsonObject.getLong("retweet_count");
+            tweet.retweeted = jsonObject.getBoolean("retweeted");
         } catch (JSONException e) {
             e.printStackTrace();
         }
