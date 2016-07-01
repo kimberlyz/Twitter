@@ -10,15 +10,15 @@ import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by kzai on 6/27/16.
+ * Created by kzai on 6/30/16.
  */
-public class MentionsTimelineFragment extends TweetsListFragment {
-
+public class SearchTweetsFragment extends TweetsListFragment {
     private TwitterClient client;
 
     @Override
@@ -29,17 +29,28 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         populateTimeline();
     }
 
+    public static SearchTweetsFragment newFragment(String query) {
+        SearchTweetsFragment searchFragment = new SearchTweetsFragment();
+        Bundle args = new Bundle();
+        args.putString("query", query);
+        searchFragment.setArguments(args);
+        return searchFragment;
+    }
+
     // Send an API request to get the timeline json
     // Fill the list view by creating the Tweet objects from the json
     public void populateTimeline() {
-        client.getMentionsTimeline(new JsonHttpResponseHandler() {
+        String query = getArguments().getString("query");
+        client.searchTweets(query, null, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                //Log.d("DEBUG", response.toString());
-                // Deserialize json
-                // Create models and add to adapter
-                // Load model data into list view
-                addAll(Tweet.fromJSONArray(response));
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                JSONArray statuses = null;
+                try {
+                    statuses = response.getJSONArray("statuses");
+                    addAll(Tweet.fromJSONArray(statuses));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -48,4 +59,5 @@ public class MentionsTimelineFragment extends TweetsListFragment {
             }
         });
     }
+
 }

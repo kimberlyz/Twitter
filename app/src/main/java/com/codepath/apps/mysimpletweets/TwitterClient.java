@@ -67,7 +67,6 @@ public class TwitterClient extends OAuthBaseClient {
 
 	public void getMyInfo(AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("account/verify_credentials.json");
-		RequestParams params = new RequestParams();
 		getClient().get(apiUrl, null, handler);
 	}
 
@@ -82,6 +81,16 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("users/show.json");
 		RequestParams params = new RequestParams();
 		params.put("screen_name", screenName);
+		getClient().get(apiUrl, params, handler);
+	}
+
+	public void searchTweets(String query, String topTweets, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("search/tweets.json");
+		RequestParams params = new RequestParams();
+		params.put("q", query);
+		if (topTweets != null) {
+			params.put("result_type", topTweets);
+		}
 		getClient().get(apiUrl, params, handler);
 	}
 

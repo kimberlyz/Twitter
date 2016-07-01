@@ -18,5 +18,11 @@
         android:title="Post"
         android:onClick="onPostTweet" />
 
+    <item android:id="@+id/action_search"
+        android:orderInCategory="3"
+        android:title="Search"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
 
 </menu>
