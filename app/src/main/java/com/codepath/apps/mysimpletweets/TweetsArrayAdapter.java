@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.activities.ComposeActivity;
 import com.codepath.apps.mysimpletweets.activities.ProfileActivity;
@@ -90,6 +91,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewholder.body.setText(tweet.getBody());
         viewholder.profileImage.setImageResource(android.R.color.transparent);
         viewholder.timestamp.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
+
         Picasso.with(getContext()).load(tweet.getUser().getProfileImage()).into(viewholder.profileImage);
 
         viewholder.profileImage.setOnClickListener(new View.OnClickListener() {
@@ -114,9 +116,11 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             @Override
             public void onClick(View v) {
                 TwitterClient client = TwitterApplication.getRestClient();
+                long id = tweet.getUid();
                 client.retweet(tweet.getUid(), new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        Toast.makeText(getContext(), "Ugh", Toast.LENGTH_SHORT).show();
                         viewholder.retweet.setBackgroundResource(R.drawable.retweet_active);
                     }
 
