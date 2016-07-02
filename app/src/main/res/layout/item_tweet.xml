@@ -78,10 +78,19 @@
             android:layout_height="27dp"
             android:background="@drawable/retweet"
             android:id="@+id/btnRetweet" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=""
+            android:gravity="center"
+            android:id="@+id/tvRetweetCount"
+            android:layout_marginLeft="7dp" />
+
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1" >
+            android:layout_weight=".9" >
         </Space>
 
         <Button
@@ -89,5 +98,13 @@
             android:layout_height="23dp"
             android:background="@drawable/heart"
             android:id="@+id/btnHeart" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity="center"
+            android:id="@+id/tvFavoriteCount"
+            android:layout_marginLeft="7dp" />
     </LinearLayout>
 </RelativeLayout>

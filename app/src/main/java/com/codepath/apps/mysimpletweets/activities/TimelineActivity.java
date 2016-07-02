@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
@@ -44,13 +46,20 @@ public class TimelineActivity extends AppCompatActivity {
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         // Attach the pager tabs to the viewpager
         tabStrip.setViewPager(vpPager);
+        tabStrip.setTextColor(Color.parseColor("#55acee"));
+        tabStrip.setIndicatorColor(Color.parseColor("#55acee"));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
+
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        int searchTextID = android.support.v7.appcompat.R.id.search_src_text;
+        TextView textView = (TextView) searchView.findViewById(searchTextID);
+        textView.setTextColor(Color.WHITE);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

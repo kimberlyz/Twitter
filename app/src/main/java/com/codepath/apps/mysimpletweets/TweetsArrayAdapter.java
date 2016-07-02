@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -60,6 +61,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         Button reply;
         Button retweet;
         Button heart;
+        TextView retweetCount;
+        TextView favoriteCount;
     }
 
     @Override
@@ -81,6 +84,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             viewholder.retweet = (Button) convertView.findViewById(R.id.btnRetweet);
             viewholder.heart = (Button) convertView.findViewById(R.id.btnHeart);
 
+            viewholder.retweetCount = (TextView) convertView.findViewById(R.id.tvRetweetCount);
+            viewholder.favoriteCount = (TextView) convertView.findViewById(R.id.tvFavoriteCount);
+
             viewholder.username.setTypeface(gotham_bold);
             viewholder.screenName.setTypeface(gotham_book);
             viewholder.body.setTypeface(gotham_book);
@@ -99,18 +105,25 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewholder.profileImage.setImageResource(android.R.color.transparent);
         viewholder.timestamp.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
 
+        viewholder.retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
+        viewholder.favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
+
         Picasso.with(getContext()).load(tweet.getUser().getProfileImage()).into(viewholder.profileImage);
 
         if (!tweet.getRetweeted()) {
             viewholder.retweet.setBackgroundResource(R.drawable.retweet);
+            viewholder.retweetCount.setTextColor(Color.parseColor("#66757f"));
         } else {
             viewholder.retweet.setBackgroundResource(R.drawable.retweet_active);
+            viewholder.retweetCount.setTextColor(Color.parseColor("#33cc33"));
         }
 
         if (!tweet.getFavorited()) {
             viewholder.heart.setBackgroundResource(R.drawable.heart);
+            viewholder.favoriteCount.setTextColor(Color.parseColor("#66757f"));
         } else {
             viewholder.heart.setBackgroundResource(R.drawable.heart_active);
+            viewholder.favoriteCount.setTextColor(Color.parseColor("#e53935"));
         }
 
         viewholder.profileImage.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +155,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                             try {
                                 tweet.setRetweeted(true);
                                 tweet.setRetweetUid(response.getLong("id"));
+                                tweet.setRetweetCount(tweet.getRetweetCount() + 1);
                                 viewholder.retweet.setBackgroundResource(R.drawable.retweet_active);
+                                viewholder.retweetCount.setTextColor(Color.parseColor("#33cc33"));
+                                viewholder.retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -160,8 +176,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                             Toast.makeText(getContext(), "UnTweeted", Toast.LENGTH_SHORT).show();
                             tweet.setRetweeted(false);
                             tweet.setRetweetUid(-1);
+                            tweet.setRetweetCount(tweet.getRetweetCount() - 1);
                             viewholder.retweet.setBackgroundResource(R.drawable.retweet);
-                            super.onSuccess(statusCode, headers, response);
+                            viewholder.retweetCount.setTextColor(Color.parseColor("#66757f"));
+                            viewholder.retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
                         }
 
                         @Override
@@ -182,7 +200,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             Toast.makeText(getContext(), "Favorited", Toast.LENGTH_SHORT).show();
                             tweet.setFavorited(true);
+                            tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
                             viewholder.heart.setBackgroundResource(R.drawable.heart_active);
+                            viewholder.favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
+                            viewholder.favoriteCount.setTextColor(Color.parseColor("#e53935"));
                         }
 
                         @Override
@@ -196,7 +217,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             Toast.makeText(getContext(), "Unfavorited", Toast.LENGTH_SHORT).show();
                             tweet.setFavorited(false);
+                            tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
                             viewholder.heart.setBackgroundResource(R.drawable.heart);
+                            viewholder.favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
+                            viewholder.favoriteCount.setTextColor(Color.parseColor("#66757f"));
                         }
 
                         @Override

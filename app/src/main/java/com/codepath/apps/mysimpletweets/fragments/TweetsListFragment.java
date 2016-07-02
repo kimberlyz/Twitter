@@ -92,13 +92,37 @@ public class TweetsListFragment extends Fragment {
             populateSearchTweetsTimeline(((SearchTweetsFragment) this).getQuery());
         } else if (this.getClass().equals(SearchTopTweetsFragment.class)) {
             populateSearchTopTweetsTimeline(((SearchTopTweetsFragment) this).getQuery());
-        } else {
+        } else if (this.getClass().equals(UserTimelineFragment.class)){
+            populateUserTimeline();
+        } else
+        {
             Log.d("DEBUG", "This isn't working");
         }
     }
 
     public void addAll(List<Tweet> tweets) {
         aTweets.addAll(tweets);
+    }
+
+    private void populateUserTimeline() {
+        String screenName = getArguments().getString("screen_name");
+        client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                //Log.d("DEBUG", response.toString());
+                // Deserialize json
+                // Create models and add to adapter
+                // Load model data into list view
+                aTweets.clear();
+                addAll(Tweet.fromJSONArray(response));
+                swipeContainer.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
     }
 
     private void populateHomeTimeline() {

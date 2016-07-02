@@ -57,9 +57,15 @@ public class Tweet {
         return favorited;
     }
 
+    public void setFavoriteCount(long c) {
+        favoriteCount = c;
+    }
+
     public long getFavoriteCount() {
         return favoriteCount;
     }
+
+    public void setRetweetCount(long c) { retweetCount = c; }
 
     public long getRetweetCount() {
         return retweetCount;
@@ -87,7 +93,7 @@ public class Tweet {
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
 
-            //tweet.favoriteCount = jsonObject.getLong("favourites_count");
+            tweet.favoriteCount = jsonObject.getLong("favorite_count");
             tweet.favorited = jsonObject.getBoolean("favorited");
 
             tweet.retweetUid = -1;
