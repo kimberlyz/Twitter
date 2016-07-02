@@ -36,6 +36,10 @@ public class TimelineActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        // Display icon in the toolbar
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.twitter_logo_toolbar);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         // Get viewpager
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);

@@ -3,6 +3,11 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:padding="10dp">
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tweetContent">
+
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -32,7 +37,8 @@
         android:id="@+id/tvBody"
         android:layout_below="@+id/tvUsername"
         android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage" />
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:autoLink="all"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,15 +57,22 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    </RelativeLayout>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivProfileImage"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_below="@+id/tweetContent"
+
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.5" >
+        </Space>
 
         <Button
             android:layout_width="20dp"

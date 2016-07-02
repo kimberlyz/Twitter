@@ -43,6 +43,10 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setTitle("");
+        // Display icon in the toolbar
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.twitter_logo_toolbar);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         // Get screenName passed when profile activity is being launched
         // If no screenName is passed, then load the logged in user's data

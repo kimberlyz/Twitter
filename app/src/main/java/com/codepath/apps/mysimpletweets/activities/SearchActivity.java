@@ -34,6 +34,7 @@ public class SearchActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
 
         // Get viewpager
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
